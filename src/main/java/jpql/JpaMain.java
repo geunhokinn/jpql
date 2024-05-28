@@ -3,6 +3,7 @@ package jpql;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Objects;
 
 public class JpaMain {
 
@@ -23,6 +24,7 @@ public class JpaMain {
             Member member = new Member();
             member.setUsername("teamA");
             member.setAge(10);
+            member.setType(MemberType.ADMIN);
 
             member.changeTeam(team);
 
@@ -31,12 +33,17 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            // select 절에 서브 쿼리
-//            String query = "select (select avg(m1.age) from Member m1) as avgAge from Member m left join Team t on m.username = t.name";
-            // from 절에 서브 쿼리
-            String query = "select mm.age, mm.username from (select m.age, m.username from Member m) as mm";
-            List<Member> result = em.createQuery(query, Member.class)
-                            .getResultList();
+            String query = "select m.username, 'Hello', true from Member m " +
+                    "where m.type = :userType";
+            List<Object[]> result = em.createQuery(query)
+                    .setParameter("userType", MemberType.ADMIN)
+                    .getResultList();
+
+            for (Object[] objects : result) {
+                System.out.println("objects[0] = " + objects[0]);
+                System.out.println("objects[1] = " + objects[1]);
+                System.out.println("objects[2] = " + objects[2]);
+            }
 
             tx.commit();
         } catch (Exception e) {
