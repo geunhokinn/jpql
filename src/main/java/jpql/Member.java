@@ -55,6 +55,14 @@ public class Member {
         this.type = type;
     }
 
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
     @Override
     public String toString() {
         return "Member{" +
