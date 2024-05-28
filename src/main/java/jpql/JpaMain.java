@@ -31,10 +31,10 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            // 조인 대상 필터링
-//            String query = "select m from Member m left join m.team t on t.name = 'teamA'";
-            // 연관관계 엾는 엔티티 외부 조인
-            String query = "select m from Member m left join Team t on m.username = t.name";
+            // select 절에 서브 쿼리
+//            String query = "select (select avg(m1.age) from Member m1) as avgAge from Member m left join Team t on m.username = t.name";
+            // from 절에 서브 쿼리
+            String query = "select mm.age, mm.username from (select m.age, m.username from Member m) as mm";
             List<Member> result = em.createQuery(query, Member.class)
                             .getResultList();
 
