@@ -38,4 +38,13 @@ public class Member {
     public void setAge(int age) {
         this.age = age;
     }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", age=" + age +
+                '}';
+    } // 양 방향시 문제가 될 수 있기 때문에 team 을 지움
 }
