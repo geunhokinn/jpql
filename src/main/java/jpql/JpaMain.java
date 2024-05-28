@@ -2,6 +2,7 @@ package jpql;
 
 import jakarta.persistence.*;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,26 +22,27 @@ public class JpaMain {
             team.setName("teamA");
             em.persist(team);
 
-            Member member = new Member();
-            member.setUsername("teamA");
-            member.setAge(10);
-            member.setType(MemberType.ADMIN);
+            Member member1 = new Member();
+            member1.setUsername("관리자1");
+            member1.changeTeam(team);
+            em.persist(member1);
 
-            member.changeTeam(team);
-
-            em.persist(member);
+            Member member2 = new Member();
+            member2.setUsername("관리자2");
+            member2.changeTeam(team);
+            em.persist(member2);
 
             em.flush();
             em.clear();
 
-            String query = "select locate('de', 'abcdegf') from Member m";
-            List<Integer> result = em.createQuery(query, Integer.class)
+            // 컬렉션 값 연관 경로
+//            String query = "select t.members from Team t";
+            String query = "select m.username from Team t join t.members m";
+            List<Collection> result = em.createQuery(query, Collection.class)
                             .getResultList();
 
-            for (Integer i : result) {
-                System.out.println("i = " + i);
-            }
-
+            System.out.println("result = " + result);
+            
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
